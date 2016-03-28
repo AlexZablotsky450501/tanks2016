@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da9b358b_fe3acfe6",
+        "filename": "LevelData.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1007753
+      },
+      "writtenOn": "2016-03-28T07:11:14Z",
+      "side": 1,
+      "message": "ну почему не прокомментировать эти матрицы?)",
+      "revId": "aee65bc5856b6df590ee4aa5ef3a29d5f80f14b6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da9b358b_3e31570c",
+        "filename": "main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1007753
+      },
+      "writtenOn": "2016-03-28T07:11:14Z",
+      "side": 1,
+      "message": "зачем столько классов в одном main?думаю,было бы неплохо их разнести",
+      "revId": "aee65bc5856b6df590ee4aa5ef3a29d5f80f14b6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
