@@ -1,100 +1,45 @@
 package tanksMenu;
 
+import java.util.Random;
+
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
-public class Character extends Pane {
-
-	ImageView imageView;
-	int count = 2;
-	int columns = 8;
-	int offsetX = 0;
-	int offsetY = 0;
-	int width = 16;
-	int height = 15;
+public class BotGameplay extends Pane {
+	boolean STATUS = true;
+	ImageView bot_image;
+	int count = 3;
+	int columns = 3;
+	int offsetX = 96;
+	int offsetY = 128;
+	int width = 32;
+	int height = 32;
 	int score = 0;
 	int DIRECTION = 0;
-	int TANK_SIZE;
-	private int speedX = 1;
-	private int speedY = 0;
+	boolean LIVE = true;
+	private boolean ready = true;
+	private int speedX;
+	private int speedY;
+	Random rand = new Random();
 	Rectangle removeRect = null;
 	SpriteAnimation animation;
 
-	public Character(ImageView imageView, int TANK_SIZE1) {
-		this.TANK_SIZE = TANK_SIZE1;
-		this.imageView = imageView;
-		this.imageView.setViewport(new Rectangle2D(offsetX, offsetY, width, height));
-		this.imageView.setFitHeight(TANK_SIZE1);
-		this.imageView.setFitWidth(TANK_SIZE1);
-		animation = new SpriteAnimation(imageView, Duration.millis(200), count, columns, offsetX, offsetY, width,
+	public BotGameplay(ImageView imageView, int x, int y) {
+		this.bot_image = imageView;
+		this.bot_image.setViewport(new Rectangle2D(offsetX, offsetY, width, height));
+		this.bot_image.setFitHeight(38);
+		this.bot_image.setFitWidth(38);
+		animation = new SpriteAnimation(bot_image, Duration.millis(200), count, columns, offsetX, offsetY, width,
 				height);
-		getChildren().addAll(imageView);
-		this.setTranslateX(198);
-		this.setTranslateY(560);
+		getChildren().addAll(bot_image);
+		this.setTranslateX(x);
+		this.setTranslateY(y);
 	}
 
 	public void moveX(int value) {
-		boolean movingRight = value > 0;
-		for (int i = 0; i < Math.abs(value); i++) {
-			for (Block platform : game.platforms) {
-				if (this.getBoundsInParent().intersects(platform.getBoundsInParent())) {
-					if (movingRight) {
-						if (this.getTranslateX() + TANK_SIZE == platform.getTranslateX()) {
-							this.setTranslateX(this.getTranslateX() - 1);
-							return;
-						}
-					} else {
-						if (this.getTranslateX() == platform.getTranslateX() + game.BLOCK_SIZE) {
-							this.setTranslateX(this.getTranslateX() + 1);
-							return;
-						}
-					}
-				}
-			}
-			if (this.getTranslateX() < 570 && movingRight)
-				this.setTranslateX(this.getTranslateX() + 1);
-			if (this.getTranslateX() > 0 && !movingRight)
-				this.setTranslateX(this.getTranslateX() - 1);
-		}
-	}
-
-	public void moveY(int value) {
-		boolean movingDown = value > 0;
-		for (int i = 0; i < Math.abs(value); i++) {
-			for (Block platform : game.platforms) {
-				if (getBoundsInParent().intersects(platform.getBoundsInParent()) && this.getTranslateY() <= 570) {
-					if (movingDown) {
-						if (this.getTranslateY() + TANK_SIZE == platform.getTranslateY()) {
-							this.setTranslateY(this.getTranslateY() - 1);
-							return;
-						}
-					} else {
-						if ((this.getTranslateY() == platform.getTranslateY() + game.BLOCK_SIZE)) {
-							this.setTranslateY(this.getTranslateY() + 1);
-							return;
-						}
-					}
-				}
-			}
-			if (this.getTranslateY() < 570 && movingDown)
-				this.setTranslateY(this.getTranslateY() + 1);
-			if (this.getTranslateY() > 0 && !movingDown)
-				this.setTranslateY(this.getTranslateY() - 1);
-		}
-	}
-
-	public void AutoMooving() {
-		if (speedX != 0)
-			AutomoveX(speedX);
-		if (speedY != 0)
-			AutomoveY(speedY);
-		return;
-	}
-
-	public void AutomoveX(int value) {
 		boolean movingRight = value > 0;
 		if (movingRight)
 			DIRECTION = 2;
@@ -175,7 +120,7 @@ public class Character extends Pane {
 		}
 	}
 
-	public void AutomoveY(int value) {
+	public void moveY(int value) {
 		boolean movingDown = value > 0;
 		if (movingDown)
 			DIRECTION = 1;
@@ -198,7 +143,7 @@ public class Character extends Pane {
 			}
 		}
 		double rand = Math.random();
-		if (rand <= 0.20 && rand >= 0)
+		if (rand <= 0.10 && rand >= 0)
 			counter = 1;
 
 		if (this.getTranslateY() < 561 && movingDown)
@@ -257,4 +202,20 @@ public class Character extends Pane {
 
 	}
 
+	public void move() {
+		if (STATUS == true) {
+			if (speedX != 0)
+				moveX(speedX);
+			if (speedY != 0)
+				moveY(speedY);
+			return;
+		} else
+			return;
+
+	}
+
+	public void setSpeed(int x, int y) {
+		speedX = x;
+		speedY = y;
+	}
 }
