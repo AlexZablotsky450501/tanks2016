@@ -2,6 +2,75 @@
   "comments": [
     {
       "key": {
+        "uuid": "baa041b7_cab8be77",
+        "filename": "BotGameplay.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1007573
+      },
+      "writtenOn": "2016-05-22T20:16:54Z",
+      "side": 1,
+      "message": "must be:\nif() {\n// code here\n}",
+      "range": {
+        "startLine": 46,
+        "startChar": 2,
+        "endLine": 47,
+        "endChar": 17
+      },
+      "revId": "d8f6a5ada79351b71a32c46daf587bf4e01dd3dd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_aab21a92",
+        "filename": "BotGameplay.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1007573
+      },
+      "writtenOn": "2016-05-22T20:16:54Z",
+      "side": 1,
+      "message": "too",
+      "range": {
+        "startLine": 66,
+        "startChar": 2,
+        "endLine": 67,
+        "endChar": 15
+      },
+      "revId": "d8f6a5ada79351b71a32c46daf587bf4e01dd3dd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_6aa89220",
+        "filename": "ChooseSave.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1007573
+      },
+      "writtenOn": "2016-05-22T20:16:54Z",
+      "side": 1,
+      "message": "delete this",
+      "range": {
+        "startLine": 48,
+        "startChar": 2,
+        "endLine": 48,
+        "endChar": 33
+      },
+      "revId": "d8f6a5ada79351b71a32c46daf587bf4e01dd3dd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "baa041b7_4a1b8eca",
         "filename": "CreateNewFile.java",
         "patchSetId": 1
@@ -47,6 +116,98 @@
       "writtenOn": "2016-05-22T19:35:58Z",
       "side": 1,
       "message": "первый коммент за 20 классов,при чем на самом очевидном месте)",
+      "revId": "d8f6a5ada79351b71a32c46daf587bf4e01dd3dd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_4aa5ce44",
+        "filename": "SubMenu.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1007573
+      },
+      "writtenOn": "2016-05-22T20:16:54Z",
+      "side": 1,
+      "message": "use shift+ctrl+f",
+      "range": {
+        "startLine": 7,
+        "startChar": 1,
+        "endLine": 14,
+        "endChar": 17
+      },
+      "revId": "d8f6a5ada79351b71a32c46daf587bf4e01dd3dd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_0a6a26ee",
+        "filename": "game.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1007573
+      },
+      "writtenOn": "2016-05-22T20:16:54Z",
+      "side": 1,
+      "message": "small first letter. Class should be named by big letter",
+      "range": {
+        "startLine": 22,
+        "startChar": 13,
+        "endLine": 22,
+        "endChar": 19
+      },
+      "revId": "d8f6a5ada79351b71a32c46daf587bf4e01dd3dd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_ea6a62ec",
+        "filename": "game.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1007573
+      },
+      "writtenOn": "2016-05-22T20:16:54Z",
+      "side": 1,
+      "message": "use shift+ctrl+f",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 88,
+        "endChar": 5
+      },
+      "revId": "d8f6a5ada79351b71a32c46daf587bf4e01dd3dd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_ca6f9efa",
+        "filename": "main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1007573
+      },
+      "writtenOn": "2016-05-22T20:16:54Z",
+      "side": 1,
+      "message": "class name..\ncant find autogenerating documentation..",
+      "range": {
+        "startLine": 13,
+        "startChar": 12,
+        "endLine": 13,
+        "endChar": 18
+      },
       "revId": "d8f6a5ada79351b71a32c46daf587bf4e01dd3dd",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
