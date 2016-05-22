@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "baa041b7_4a1b8eca",
+        "filename": "CreateNewFile.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1007753
+      },
+      "writtenOn": "2016-05-22T19:35:58Z",
+      "side": 1,
+      "message": "КОММЕНТЫ.ХОЧУ КОММЕНТЫ",
+      "revId": "d8f6a5ada79351b71a32c46daf587bf4e01dd3dd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_0a80e6be",
+        "filename": "LevelData.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1007753
+      },
+      "writtenOn": "2016-05-22T19:35:58Z",
+      "side": 1,
+      "message": "да вы издеваетесь",
+      "revId": "d8f6a5ada79351b71a32c46daf587bf4e01dd3dd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "baa041b7_ca855ecf",
+        "filename": "Replay.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1007753
+      },
+      "writtenOn": "2016-05-22T19:35:58Z",
+      "side": 1,
+      "message": "первый коммент за 20 классов,при чем на самом очевидном месте)",
+      "revId": "d8f6a5ada79351b71a32c46daf587bf4e01dd3dd",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
