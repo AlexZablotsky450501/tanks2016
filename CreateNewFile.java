@@ -2,8 +2,16 @@ package tanksMenu;
 
 import java.io.File;
 import java.io.IOException;
-
+/**
+ * Класс создания нового имени для сохранения
+ * @author zork
+ *
+ */
 public class CreateNewFile {
+	/**
+	 * Метод генерации нового имени для последнего сохранения
+	 * @return
+	 */
 	public static String findLastFileName() {
 		String fileName = null;
 		File[] fileList;
@@ -22,7 +30,10 @@ public class CreateNewFile {
 		createNewFile(fileName);
 		return fileName;
 	}
-
+/**
+ * Метод создания файла с именем, созданным в предыдущем методе
+ * @param path
+ */
 	private static void createNewFile(String path) {
 		File newFile = new File(path);
 		newFile.getParentFile().mkdirs();

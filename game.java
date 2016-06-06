@@ -4,11 +4,13 @@ import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.animation.AnimationTimer;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -19,6 +21,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+
+/**
+ * Основной класс игры, создающий игровое поле со всеми моделями
+ * 
+ * @author zork
+ *
+ */
 public class game {
 	private HashMap<KeyCode, Boolean> keys = new HashMap<>();
 	public static ArrayList<Block> platforms = new ArrayList<>();
@@ -27,56 +36,82 @@ public class game {
 	public static ArrayList<BotGameplay> bots = new ArrayList<>();
 	int TANK_SIZE = 30;
 	AnimationTimer timer;
-	Image image = new Image(getClass().getResourceAsStream("1.png"));
-	Image image1 = new Image(getClass().getResourceAsStream("3.png"));
-	ImageView imageView = new ImageView(image);
+	ImageView imageView;
+	ImageView imageView1;
+	ImageView imageView2;
+	ImageView imageView3;
 	Character player;
-
-	ImageView Bot1image = new ImageView(image1);
-	BotGameplay bot1 = new BotGameplay(Bot1image, 0, 0);
-	ImageView Bot2image = new ImageView(image1);
-	BotGameplay bot2 = new BotGameplay(Bot2image, 80, 0);
-	ImageView Bot3image = new ImageView(image1);
-	BotGameplay bot3 = new BotGameplay(Bot3image, 160, 0);
+	BotGameplay bot1;
+	BotGameplay bot2;
+	BotGameplay bot3;
 	Shooting sh;
 	DataOutputStream dos;
+	Thread tr;
+	Thread botmoving;
+	Thread playermoving;
+	Thread autoplayermod;
 	int botLifeStatus = 0;
 	boolean AUTOMOD = false;
 	int DIRECTION = 0;
-	int botSHOOTTIMER = 110;
+	int BotShootTimer = 110;
 	public static final int BLOCK_SIZE = 40;
-
 	public static final int BOT_SIZE = 38;
 	int levelNumber = 0;
 	int shoottimer = 0;
-	Scene Gamescene;
+	double GameTimer=0;
+
 	static Pane root = new Pane();
-	Stage GameStage = new Stage();
+	Stage GameStage;
 	boolean SCENESTATUS = false;
 	String filename = null;
+	Stage Primary;
+	Scene Gamescene;
 
+	/**
+	 * Метод закрытия главного меню и создания игрового поля для режима
+	 * "игрок+компьютер"
+	 * 
+	 * @param primary
+	 */
 	public void CloseMenu(Stage primary) // закрываем главное меню и выводим
 											// окно игры
 	{
+		Primary = primary;
 		primary.close();
 		this.TANK_SIZE = 30;
-		player = new Character(imageView, TANK_SIZE);
 		AUTOMOD = false;
-		GameWindow(primary);
+		Pane newp = new Pane();
+		root = newp;
+		GameWindow();
 	}
 
+	/**
+	 * Метод закрытия главного меню и создания игрового поля для режима
+	 * "компьютер+компьютер"
+	 * 
+	 * @param primary
+	 */
 	public void AutoGameMod(Stage primary) {
+
+		Primary = primary;
 		primary.close();
 		this.TANK_SIZE = 38;
-		player = new Character(imageView, TANK_SIZE);
 		AUTOMOD = true;
-		GameWindow(primary);
+		Pane newp = new Pane();
+		root = newp;
+		GameWindow();
 	}
 
-	public void GameWindow(Stage primary) // рисуем окно игры и добавляем на
-											// него все элементы
+	/**
+	 * метод отрисовки игрового поля и добавления на него всех моделей
+	 * 
+	 * @param primary
+	 */
+	public void GameWindow() // рисуем окно игры и добавляем на
+								// него все элементы
 	{
-
+		CreateModels();
+		GameStage = new Stage();
 		Thread filecreating = new Thread(new Runnable() {
 
 			@Override
@@ -108,7 +143,7 @@ public class game {
 			}
 
 		});
-
+		CreateThreads();
 		bot1.setSpeed(1, 0);
 		bot2.setSpeed(1, 0);
 		bot3.setSpeed(1, 0);
@@ -121,13 +156,16 @@ public class game {
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
-
-		Gamescene = new Scene(root);
-		Gamescene.setFill(Color.BLACK);
+		Scene Gamescene = new Scene(root, Color.BLACK);
 		Gamescene.setOnKeyPressed(event -> keys.put(event.getCode(), true));
 		Gamescene.setOnKeyReleased(event -> {
 			keys.put(event.getCode(), false);
 		});
+		GameStage.setTitle("Game");
+		GameStage.setScene(Gamescene);
+		SCENESTATUS = true;
+
+		GameStage.show();
 		try {
 			filecreating.join();
 		} catch (InterruptedException e1) {
@@ -143,29 +181,87 @@ public class game {
 		timer = new AnimationTimer() {
 			@Override
 			public void handle(long now) {
-				update(primary);
-				// bonus();
+				update();
 			}
 		};
 		timer.start();
-		GameStage.setTitle("Game");
-		GameStage.setScene(Gamescene);
-		SCENESTATUS = true;
 
-		GameStage.show();
 	}
 
-	public void update(Stage primary) {
-
-		Thread tr = new Thread(new Runnable() {
-
+	private void CreateThreads() {
+		
+		tr = new Thread(new Runnable() {
 			@Override
 			public void run() {
 				WriteInFile();
 			}
-
 		});
-		tr.start();
+		botmoving = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				BotMoving();
+			}
+		});
+		playermoving = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				PlayerMoving();
+			}
+		});
+		autoplayermod = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				AutoPlayerMod();
+			}
+		});
+	}
+
+	private void CreateModels() {
+		InputStream is = null;
+		try {
+			is = Files.newInputStream(Paths.get("src/tanksMenu/1.png"));
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		Image playerIm = new Image(is);
+		try {
+			is.close();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		imageView = new ImageView(playerIm);
+		player = new Character(imageView, TANK_SIZE);
+		InputStream is1 = null;
+		try {
+			is1 = Files.newInputStream(Paths.get("src/tanksMenu/3.png"));
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		Image botIm = new Image(is1);
+		try {
+			is1.close();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		imageView1 = new ImageView(botIm);
+		imageView2 = new ImageView(botIm);
+		imageView3 = new ImageView(botIm);
+		bot1 = new BotGameplay(imageView1, 0, 0);
+		bot2 = new BotGameplay(imageView2, 80, 0);
+		bot3 = new BotGameplay(imageView3, 160, 0);
+	}
+
+	/**
+	 * Метод обновления игрового поля, вызывающийся каждый момент срабатывания
+	 * системного таймера В нём производится запись в файл, проверки на смену
+	 * уровней, состояния жизни ботов, а также вызов методов перевижения моделей
+	 * по игровому полю.
+	 * 
+	 * @param primary
+	 */
+	public void update() {
+		GameTimer+=1;
+		tr.run();
 		for (BotGameplay bg : bots) { // проверка Состояния ботов(живы или нет)
 										// для мены уровня
 			if (bg.LIVE == false)
@@ -173,17 +269,11 @@ public class game {
 			if (bg.getBoundsInParent().intersects(player.getBoundsInParent())) {
 				timer.stop();
 				gameOverWind();
+				return;
 			}
 		}
-		Thread botmoving = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				BotMoving();
-			}
-
-		});
-		botmoving.start();
+		
+		botmoving.run();
 
 		if (isPressed(KeyCode.N) || botLifeStatus == 3) {
 			try {
@@ -198,37 +288,21 @@ public class game {
 			}
 			CreateNewLevel();
 		}
-		Thread playermoving = new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-				PlayerMoving();
-			}
-
-		});
-		playermoving.start();
-
-		Thread autoplayermod = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				AutoPlayerMod();
-			}
-
-		});
-		autoplayermod.start();
+		
+		playermoving.run();
+		
+		
+		autoplayermod.run();
 
 		if (shoottimer <= 60 && shoottimer > 0) { // Установка Шуттаймеров
 			shoottimer--;
 
 		}
-		if (botSHOOTTIMER <= 110 && botSHOOTTIMER > 0) {
-			botSHOOTTIMER--;
+		if (BotShootTimer <= 110 && BotShootTimer > 0) {
+			BotShootTimer--;
 
 		}
-		IntersectCheck(); // проверка на пересечения пуль с игроками, с королём
-							// и т.д.
-
 		try {
 			tr.join();
 		} catch (InterruptedException e) {
@@ -251,10 +325,13 @@ public class game {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
+		IntersectCheck();
 		botLifeStatus = 0;
 	}
 
+	/**
+	 * Метод, вызывающий смену уровня и заносящий на панель новые модели
+	 */
 	private void CreateNewLevel() {
 		botLifeStatus = 0;
 		levelNumber++;
@@ -271,16 +348,23 @@ public class game {
 			}
 		}
 		if (levelNumber == 3) {
+			timer.stop();
 			WinnerWind();
+			return;
 		}
 	}
 
+	/**
+	 * Метод, выполняющий проверки на пересечения пуль с игроком и ботами
+	 */
 	public void IntersectCheck() {
 		for (Shooting shts : this.botshoots) {
 
 			if (shts.STATUS == false || shts.getBoundsInParent().intersects(player.getBoundsInParent())) {
 				timer.stop();
+
 				gameOverWind();
+				return;
 
 			}
 			if (shts.getTranslateX() != 800 && shts.getTranslateY() != 800)
@@ -300,6 +384,7 @@ public class game {
 			if (shts.STATUS == false) {
 				timer.stop();
 				gameOverWind();
+				return;
 
 			}
 			if (shts.getTranslateX() != 800 && shts.getTranslateY() != 800)
@@ -307,6 +392,9 @@ public class game {
 		}
 	}
 
+	/**
+	 * Метод передвижения игрока при автоматическом режиме игры
+	 */
 	public void AutoPlayerMod() {
 		if (AUTOMOD == true) {
 			if (player.DIRECTION == 0) {
@@ -339,6 +427,9 @@ public class game {
 		}
 	}
 
+	/**
+	 * Метод передвижения игрока в режиме "Игрок+компьютер"
+	 */
 	public void PlayerMoving() {
 		if (AUTOMOD == false) {
 			if (isPressed(KeyCode.SPACE)) {
@@ -383,8 +474,11 @@ public class game {
 		}
 	}
 
+	/**
+	 * Метод передвижения ботов по игровому полю
+	 */
 	public void BotMoving() {
-		if (botSHOOTTIMER == 0) {
+		if (BotShootTimer == 0) {
 			for (BotGameplay bg : bots) {
 				for (Shooting sht : botshoots) {
 					if (sht.getTranslateX() == 800 && sht.getTranslateY() == 800) {
@@ -394,7 +488,7 @@ public class game {
 				}
 
 			}
-			botSHOOTTIMER = 110;
+			BotShootTimer = 110;
 		}
 		if (bot1.LIVE == true) {
 			bot1.move();
@@ -413,10 +507,21 @@ public class game {
 		}
 	}
 
+	/**
+	 * метод считывания кода нажатой клавиши
+	 * 
+	 * @param key
+	 * @return
+	 */
 	public boolean isPressed(KeyCode key) {
 		return keys.getOrDefault(key, false);
 	}
 
+	/**
+	 * Метод, создающий новые модели текстур
+	 * 
+	 * @param levelnum
+	 */
 	@SuppressWarnings("unused")
 	public void changeLevel(int levelnum) // функция смены уровня, изменяющая
 											// текстуры
@@ -464,10 +569,17 @@ public class game {
 
 	}
 
+	/**
+	 * Вывод сообщения при прохождении игры
+	 */
 	public void WinnerWind() // вывод сообщения после прохождения всех уровней
 	{
+		shoots.clear();
+		botshoots.clear();
+		bots.clear();
+		platforms.clear();
 		GameStage.close();
-
+		this.WriteTimerAndStatus(GameTimer, 1);
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("WINNER");
 		alert.setHeaderText(null);
@@ -476,17 +588,27 @@ public class game {
 
 	}
 
+	/**
+	 * Вывод сообщения при проигрыше
+	 */
 	public void gameOverWind() // вывод сообщения после прохождения всех уровней
 	{
+		shoots.clear();
+		botshoots.clear();
+		bots.clear();
+		platforms.clear();
 		GameStage.close();
+		this.WriteTimerAndStatus(GameTimer, 0);
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("GAME OVER");
 		alert.setHeaderText(null);
 		alert.setContentText("YOU LOSE)");
 		alert.show();
-
 	}
 
+	/**
+	 * Создание объектов пуль
+	 */
 	public void createShoots() {
 
 		Shooting.GameStatus = true;
@@ -501,7 +623,9 @@ public class game {
 		}
 
 	}
-
+	/**
+	 * Метод записи в файл
+	 */
 	public void WriteInFile() {
 		double[] data = new double[500];
 		WriteInArray(data);
@@ -516,6 +640,11 @@ public class game {
 		}
 	}
 
+	/**
+	 * Метод создания массива для записи в файл
+	 * 
+	 * @param data
+	 */
 	public void WriteInArray(double[] data) {
 		int i = 0;
 		data[i] = levelNumber;
@@ -558,6 +687,19 @@ public class game {
 			i++;
 			data[i] = sh.getTranslateY();
 			i++;
+		}
+	}
+	private void WriteTimerAndStatus(double time, double Status)
+	{
+		try {
+			dos.writeDouble(time);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			dos.writeDouble(Status);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

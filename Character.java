@@ -5,7 +5,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-
+/**
+ * Класс, создающий модель игрока и управляющий передвижением по экрану
+ * @author zork
+ *
+ */
 public class Character extends Pane {
 
 	ImageView imageView;
@@ -22,7 +26,11 @@ public class Character extends Pane {
 	private int speedY = 0;
 	Rectangle removeRect = null;
 	SpriteAnimation animation;
-
+/**
+ * Метод отрисовки модели игрока
+ * @param imageView
+ * @param TANK_SIZE1
+ */
 	public Character(ImageView imageView, int TANK_SIZE1) {
 		this.TANK_SIZE = TANK_SIZE1;
 		this.imageView = imageView;
@@ -35,7 +43,10 @@ public class Character extends Pane {
 		this.setTranslateX(198);
 		this.setTranslateY(560);
 	}
-
+/**
+ * Метод передвижения игрока по оси Х
+ * @param value
+ */
 	public void moveX(int value) {
 		boolean movingRight = value > 0;
 		for (int i = 0; i < Math.abs(value); i++) {
@@ -60,7 +71,10 @@ public class Character extends Pane {
 				this.setTranslateX(this.getTranslateX() - 1);
 		}
 	}
-
+/**
+ * Функция передвижения по оси У
+ * @param value
+ */
 	public void moveY(int value) {
 		boolean movingDown = value > 0;
 		for (int i = 0; i < Math.abs(value); i++) {
@@ -85,7 +99,9 @@ public class Character extends Pane {
 				this.setTranslateY(this.getTranslateY() - 1);
 		}
 	}
-
+/**
+ * Функция автопередвижения модели игрока при автоматическом редиме игры
+ */
 	public void AutoMooving() {
 		if (speedX != 0)
 			AutomoveX(speedX);
@@ -93,7 +109,10 @@ public class Character extends Pane {
 			AutomoveY(speedY);
 		return;
 	}
-
+/**
+ * Функция передвижения игрока по оси Х при автоматическом режиме игры
+ * @param value
+ */
 	public void AutomoveX(int value) {
 		boolean movingRight = value > 0;
 		if (movingRight)
@@ -174,7 +193,10 @@ public class Character extends Pane {
 				return;
 		}
 	}
-
+/**
+ * Функция перемещения по оси У при автоматическом режиме игры
+ * @param value
+ */
 	public void AutomoveY(int value) {
 		boolean movingDown = value > 0;
 		if (movingDown)
@@ -252,9 +274,6 @@ public class Character extends Pane {
 				speedX = 0;
 				return;
 			}
-
 		}
-
 	}
-
 }

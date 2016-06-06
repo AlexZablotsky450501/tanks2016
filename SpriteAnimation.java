@@ -6,7 +6,11 @@ import javafx.animation.Transition;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
-
+/**
+ *  ласс создани€ анимации при передвижении моделей
+ * @author zork
+ *
+ */
 public class SpriteAnimation extends Transition {
 	private final ImageView imageView;
 	private final int count;

@@ -17,7 +17,11 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
+/**
+ * Класс воспроизведения игры по выбранному файлу
+ * @author zork
+ *
+ */
 public class Replay {
 	public static ArrayList<Block> platforms = new ArrayList<>();
 	public static ArrayList<Shooting> shoots = new ArrayList<>();
@@ -53,31 +57,34 @@ public class Replay {
 	String Filepath;
 	Stage Main=new Stage();
 
-	public void CloseMenu(Stage main,Stage primary, String path) {
+	public void CloseMenu(Stage primary, String path) {
+		root.getChildren().clear();
+		shoots.clear();
+		botshoots.clear();
+		bots.clear();
+		platforms.clear();
 		primary.close();
-		Main=main;
 		Filepath = path;
 		this.TANK_SIZE = 30;
 		player = new Character(imageView, TANK_SIZE);
+		Pane newp=new Pane();
+		root=newp;
 		AUTOMOD = false;
 		GameWindow(primary);
 	}
-
+/**
+ * Метод создания поля для воспроизведения сохранения
+ * @param primary
+ */
 	public void GameWindow(Stage primary) {
 		bots.add(bot1);
 		bots.add(bot2);
 		bots.add(bot3);
 		root.setPrefSize(600, 600);
 		root.getChildren().addAll(player, bot1, bot2, bot3);
-		Thread createsh = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				createShoots();
-			}
-
-		});
-		createsh.start();
+		
+		createShoots();		
+	
 		Thread changelvl = new Thread(new Runnable() {
 
 			@Override
@@ -91,18 +98,14 @@ public class Replay {
 		bot1.setSpeed(1, 0);
 		bot2.setSpeed(1, 0);
 		bot3.setSpeed(1, 0);
-		try {
-			createsh.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		
 		try {
 			changelvl.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		Scene Gamescene = new Scene(root);
-		Gamescene.setFill(Color.BLACK);
+		Scene Gamescene = new Scene(root, Color.BLACK);
+		//Gamescene.setFill(Color.BLACK);
 
 		GameStage.setTitle("Game");
 		GameStage.setScene(Gamescene);
@@ -127,7 +130,9 @@ public class Replay {
 		}
 
 	}
-
+/**
+ * Метод создания пуль
+ */
 	public void createShoots() {
 		Shooting.GameStatus = false;
 
@@ -140,7 +145,10 @@ public class Replay {
 			botshoots.add(sh);
 		}
 	}
-
+/**
+ * Метод смены уровня
+ * @param levelnum
+ */
 	@SuppressWarnings("unused")
 	public void changeLevel(int levelnum) // функция смены уровня, изменяющая
 	// текстуры
@@ -187,7 +195,9 @@ public class Replay {
 		bot3.animation.play();
 
 	}
-
+/**
+ * Метод чтения из файла
+ */
 	public void ReadFromFile() {
 		double[] num = new double[500];
 		int i = 0;
@@ -210,12 +220,14 @@ public class Replay {
 			{
 				tl.stop();
 				GameStage.close();
-				Main.show();
 			}
 		}
 
 	}
-
+/**
+ * Метод передвижения моделей в соответствии со считанным массивом из файла
+ * @param data
+ */
 	public void REPLAY(double[] data) {
 		int i = 0;
 		if (data[i] > levelNumber) {

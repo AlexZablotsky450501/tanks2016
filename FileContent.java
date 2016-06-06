@@ -1,6 +1,9 @@
 package tanksMenu;
 
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -14,21 +17,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-/**
- * Класс, создающий окно выбора сохранения
- * @author zork
- *
- */
-public class ChooseSave {
-	Stage st = new Stage();
-	Stage Primary=new Stage();
-	/**
-	 * Метод сохранения всех файлов директории в список
-	 * @param primary
-	 */
-	public void SaveList(Stage primary) {
-		Primary=primary;
-		primary.close();
+import scala_pack.notation;
+
+public class FileContent {
+	public void ShowList(Stage Gamestage) {
+		Gamestage.close();
 		File[] fileList;
 		File directory = new File("saves/");
 		fileList = directory.listFiles();
@@ -38,24 +31,23 @@ public class ChooseSave {
 			filenames[i] = fl.getName();
 			i++;
 		}
-		SavesWnd(filenames);
+		FilesWnd(filenames);
 	}
-/**
- * Отрисовка окна выбора сохранения
- * @param fileList
- */
-	public void SavesWnd(String[] fileList) {
+
+	private void FilesWnd(String[] fileList) {
+		Stage st = new Stage();
 		MenuMain[] saveMenu = new MenuMain[fileList.length + 1];
 		int i = 0;
 		for (String fl : fileList) {
 			MenuMain Mm = new MenuMain(fl);
-			Mm.setOnMouseClicked(event->StartReplay(Mm.PATH,st));
+			Mm.setOnMouseClicked(event -> StartNotation(Mm.PATH,st));
 			saveMenu[i] = Mm;
 			i++;
 		}
 		String back = "Выход";
+	
 		MenuMain ba = new MenuMain(back);
-		ba.setOnMouseClicked(event->BackToMain(st,Primary));
+		ba.setOnMouseClicked(event -> st.close());
 		saveMenu[i] = ba;
 		InputStream is = null;
 		try {
@@ -78,19 +70,14 @@ public class ChooseSave {
 		saves.getChildren().add(vj);
 		saves.getChildren().add(mb);
 		Scene sc = new Scene(saves, 500, 500);
-		sc.setOnScroll(event->{
-			if(saveMenu[saveMenu.length - 1].getBoundsInParent().getMaxY() <= 400 && event.getDeltaY()<0)
-			{
+		sc.setOnScroll(event -> {
+			if (saveMenu[saveMenu.length - 1].getBoundsInParent().getMaxY() <= 400 && event.getDeltaY() < 0) {
+				return;
+			} else if (saveMenu[0].getBoundsInParent().getMaxY() >= 0 && event.getDeltaY() > 0) {
 				return;
 			}
-			else 
-			if(saveMenu[0].getBoundsInParent().getMaxY()>=0 && event.getDeltaY()>0)
-			{
-				return;
-			}
-			for(MenuMain mm :saveMenu)
-			{
-				mm.setTranslateY(mm.getTranslateY()+event.getDeltaY()/Math.abs(event.getDeltaY())*10);
+			for (MenuMain mm : saveMenu) {
+				mm.setTranslateY(mm.getTranslateY() + event.getDeltaY() / Math.abs(event.getDeltaY()) * 10);
 			}
 		});
 		sc.setOnKeyPressed(event -> {
@@ -110,27 +97,34 @@ public class ChooseSave {
 				}
 			}
 		});
-		
+
 		st.setScene(sc);
 		st.show();
 	}
-	/**
-	 * Метод, закрывающий окно выбора сохранения и возвращающий главное меню
-	 * @param ST
-	 * @param PRIMARY
-	 */
-	private void BackToMain(Stage ST,Stage PRIMARY)
-	{
-		st.close();		
-	}
-	/**
-	 * Метод, закрывающий окно выбора сохранения и запускающий реплей
-	 * @param Path
-	 * @param stage
-	 */
-	private void StartReplay(String Path, Stage stage)
-	{
-		Replay newRepl=new Replay();
-		newRepl.CloseMenu(stage, Path);
+
+	private void StartNotation(String path,Stage stage) {
+		DataInputStream dos = null;
+		try {
+			dos = new DataInputStream(new FileInputStream("saves/" + path));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		double[] num = new double[500];
+		int i = 0;
+		int fl = 0;
+		while (fl == 0) {
+			i = 0;
+			while (i < 500 && fl==0) {
+				try {
+					num[i] = dos.readDouble();
+				} catch (IOException e) {
+					fl = 1;
+				}
+				i++;
+			}
+			if (fl == 0 ) {
+				notation.not(num);
+			} 
+		}
 	}
 }

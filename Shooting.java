@@ -1,21 +1,44 @@
 package tanksMenu;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-
+/**
+ * Класс, создающий модели пуль и управляющий их передвижением
+ * @author zork
+ *
+ */
 public class Shooting extends Pane {
-	ImageView shoot;
 	public static boolean GameStatus = true;
 	boolean STATUS = true;
 	int napr;
-
+/**
+ * Метод создания модельки пули
+ * @param x
+ * @param y
+ */
 	public Shooting(int x, int y) {
-		Image image = new Image(getClass().getResourceAsStream("shoot.png"));
+		InputStream is = null;
+		try {
+			is = Files.newInputStream(Paths.get("src/tanksMenu/shoot.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-		shoot = new ImageView(image);
-
+		Image sh = new Image(is);
+		sh.cancel();
+		try {
+			is.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		ImageView shoot=new ImageView(sh);
 		shoot.setViewport(new Rectangle2D(210, 1110, 90, 90));
 		shoot.setFitHeight(20);
 		shoot.setFitWidth(20);
@@ -30,7 +53,12 @@ public class Shooting extends Pane {
 			Replay.root.getChildren().addAll(this);
 		}
 	}
-
+/**
+ * Метод установки начальной позиции для перемещения ппули
+ * @param x
+ * @param y
+ * @param napr
+ */
 	public void setShoot(double x, double y, int napr) {
 		if (napr == 0) {
 			this.napr = napr;
@@ -54,7 +82,9 @@ public class Shooting extends Pane {
 			this.setTranslateY(y + 5);
 		}
 	}
-
+/**
+ * Метод передвижения пули
+ */
 	public void move() {
 		if (napr == 0) {
 			moveY(-3);
@@ -69,7 +99,10 @@ public class Shooting extends Pane {
 			moveX(-3);
 		}
 	}
-
+/**
+ * Метод передвижения пули по осиХ
+ * @param value
+ */
 	public void moveX(int value) {
 		boolean movingRight = value > 0;
 		for (int i = 0; i < Math.abs(value); i++) {
@@ -105,7 +138,10 @@ public class Shooting extends Pane {
 
 		}
 	}
-
+/**
+ * Метод передвижения по оси У
+ * @param value
+ */
 	public void moveY(int value) {
 		boolean movingDown = value > 0;
 		for (int i = 0; i < Math.abs(value); i++) {

@@ -4,7 +4,11 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-
+/**
+ *  ласс, создающий блоки игрового пол€
+ * @author zork
+ *
+ */
 public class Block extends Pane {
 	Image blocksImg = new Image(getClass().getResourceAsStream("1.png"));
 	ImageView block;
@@ -15,6 +19,12 @@ public class Block extends Pane {
 	}
 
 	BlockType blockt;
+	/**
+	 * ћетод создани€ блока, соответствующего позиции в матрице уровн€
+	 * @param blockType - тип блока
+	 * @param x- координаты блока на основном игровом поле
+	 * @param y
+	 */
 
 	public Block(BlockType blockType, int x, int y) {
 		blockt = blockType;
@@ -49,7 +59,10 @@ public class Block extends Pane {
 			Replay.root.getChildren().add(this);
 		}
 	}
-
+/**
+ * ћетод, возвращающий тип определЄнного блока
+ * @return
+ */
 	public Block.BlockType gettype() {
 		return this.blockt;
 	}

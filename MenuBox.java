@@ -3,6 +3,11 @@ package tanksMenu;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Класс для создания эффекта появления меню
+ * @author zork
+ *
+ */
 class MenuBox extends Pane {
 	static SubMenu sub;
 

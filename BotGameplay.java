@@ -7,7 +7,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-
+/**
+ * Класс ботов. Создаёт модели ботов и управле=яет их движением
+ * @author zork
+ *
+ */
 public class BotGameplay extends Pane {
 	boolean STATUS = true;
 	ImageView bot_image;
@@ -26,7 +30,12 @@ public class BotGameplay extends Pane {
 	Random rand = new Random();
 	Rectangle removeRect = null;
 	SpriteAnimation animation;
-
+/**
+ * Конструктор, который создаёт модельку бота и добавляет её на поле
+ * @param imageView - картинка для модели бота
+ * @param x
+ * @param y
+ */
 	public BotGameplay(ImageView imageView, int x, int y) {
 		this.bot_image = imageView;
 		this.bot_image.setViewport(new Rectangle2D(offsetX, offsetY, width, height));
@@ -38,13 +47,21 @@ public class BotGameplay extends Pane {
 		this.setTranslateX(x);
 		this.setTranslateY(y);
 	}
-
+/**
+ * Функция передвижения модели бота по оси Х
+ * В этой функции используется рандом для того, чтобы бот мнял направление
+ * @param value
+ */
 	public void moveX(int value) {
 		boolean movingRight = value > 0;
 		if (movingRight)
+			{
 			DIRECTION = 2;
+			}
 		if (!movingRight)
+			{
 			DIRECTION = 3;
+			}
 		int counter = 0;
 		for (Block platform : game.platforms) {
 			if (this.getBoundsInParent().intersects(platform.getBoundsInParent())) {
@@ -119,7 +136,11 @@ public class BotGameplay extends Pane {
 				return;
 		}
 	}
-
+/**
+ * Функция перемещения бота по оси У
+ * Для смены направления движения используется рандом
+ * @param value
+ */
 	public void moveY(int value) {
 		boolean movingDown = value > 0;
 		if (movingDown)
@@ -201,7 +222,9 @@ public class BotGameplay extends Pane {
 		}
 
 	}
-
+/**
+ * функция управляющая передвижением по игровому полю
+ */
 	public void move() {
 		if (STATUS == true) {
 			if (speedX != 0)
@@ -213,7 +236,11 @@ public class BotGameplay extends Pane {
 			return;
 
 	}
-
+/**
+ * метод установки скорости движения бота
+ * @param x
+ * @param y
+ */
 	public void setSpeed(int x, int y) {
 		speedX = x;
 		speedY = y;

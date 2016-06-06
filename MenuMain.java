@@ -10,6 +10,11 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+/**
+ *  ласс создани€ " нопок" меню
+ * @author zork
+ *
+ */
 class MenuMain extends StackPane {
 		String PATH=null;
 	public MenuMain(String name) {
@@ -17,7 +22,7 @@ class MenuMain extends StackPane {
 		Rectangle bg = new Rectangle(200, 20);
 		bg.setFill(javafx.scene.paint.Color.WHITE);
 		bg.setOpacity(0.8);
-
+		this.setPrefSize(200, 20);
 		Text text = new Text(name);
 		text.setFill(javafx.scene.paint.Color.GREEN);
 		text.setFont(Font.font("Arial", FontWeight.BOLD, 14));
